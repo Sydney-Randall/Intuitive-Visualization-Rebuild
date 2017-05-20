@@ -2,7 +2,8 @@
 
 Community service team project for College Place School District
 
-Nolan Chinn & Sydney Randall
+Nolan Chinn & Sydney Randall  
+See a site demo [here](https://sydney-randall.github.io/Intuitive-Visualization-Rebuild/).
 
 Rebuilt using Angular CLI for more development options.
 
