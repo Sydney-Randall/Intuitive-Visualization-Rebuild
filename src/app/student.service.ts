@@ -5,12 +5,12 @@ import { Student, STUDENTS} from './student';
 export class StudentService {
     currentStudent: Student;
 
-    //return the whole array of students
-    getStudents(): Student[]{
+    // Return the whole array of students
+    getStudents(): Student[] {
         return STUDENTS;
     }
 
-    //return a specific student, based on ID
+    // Return a specific student, based on ID
     getStudent(id: string): Student {
         for (let i = 0; i < STUDENTS.length; i++) {
             if (id == STUDENTS[i].id) {

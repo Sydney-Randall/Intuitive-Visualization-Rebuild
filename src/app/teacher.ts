@@ -1,4 +1,9 @@
-﻿export const TEACHERS: Teacher[] = [];
+﻿/*
+A class that holds teacher data.
+TEACHERS is an array of teachers.
+ */
+
+export const TEACHERS: Teacher[] = [];
 
 export class Teacher {
     id: string;

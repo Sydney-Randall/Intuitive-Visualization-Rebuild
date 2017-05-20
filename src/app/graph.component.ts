@@ -2,7 +2,7 @@
 
 import { Component, Input, OnInit, OnChanges, ViewChild, ElementRef, AfterViewChecked} from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Teacher, TEACHERS }  from './teacher';
+import { Teacher, TEACHERS } from './teacher';
 import { Student, STUDENTS } from './student';
 import { Test, TESTS, StudentTESTS } from './tests';
 import { StudentService} from './student.service';
@@ -10,12 +10,10 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Stocks } from './data';
 import * as d3 from 'd3';
 
-// Add graphing here
-
 @Component({
     selector: 'my-graphs',
     //templateUrl: 'app/graph.component.html',
-    template:`
+    template: `
         <svg width="900" height="500"></svg>
 
         <div *ngIf="currentStudent">
@@ -29,13 +27,11 @@ import * as d3 from 'd3';
         <h4>Standardized Test Results</h4>
         <ul class="tests">
             <li *ngFor="let test of tests">
-                {{test.desc}} {{test.abbreviation}} {{test.taken}}
-                <br>
-                {{test.score}} / {{test.maxScore}} : {{test.percentage}}
-                <br>
-                Class Average : {{test.classAverage}}
-                <br>
-                School Average : {{test.schoolAverage}}
+                {{test.fullName}} {{test.desc}} {{test.taken}}
+            <br>
+              <h4 [ngStyle]="{'color': test.levelColor}">
+                    {{test.levelText}}
+              </h4>
             </li>
         </ul>
     `

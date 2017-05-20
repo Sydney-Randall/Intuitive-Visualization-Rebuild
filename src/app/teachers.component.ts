@@ -1,9 +1,9 @@
 ﻿import { Component } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
-import { Teacher, TEACHERS }  from './teacher';
+import { Teacher, TEACHERS } from './teacher';
 import { Student, STUDENTS } from './student';
-import { Test, TESTS,ClassTESTS } from './tests';
+import { Test, TESTS, ClassTESTS } from './tests';
 
 @Component({
     selector: 'my-teachers',
@@ -71,20 +71,20 @@ export class TeacherComponent {
     teachers = TEACHERS;
     selectedTeacher: Teacher;
 
-    //selection for teachers
+    // Selection for teachers
     onSelectTeacher(teacher: Teacher): void {
         this.selectedTeacher = teacher;
         this.readStudentCsvData();
         this.router.navigate(['/students', teacher.id]);
     }
 
-    //reads teacher data on startup
+    // Reads teacher data on startup
     ngOnInit(): void {
         this.readTeacherCsvData();
         this.readTestCsvData();
     }
 
-    //get the tests of a certain class into an array
+    // Get the tests of a certain class into an array
     private getClassTests(): void {
         ClassTESTS.splice(0, ClassTESTS.length);
         for (let i = 0; i < STUDENTS.length; i++) {
@@ -96,7 +96,7 @@ export class TeacherComponent {
         }
     }
 
-    //calculate school average for each test
+    // Calculate school average for each test
     private calculateSchoolAVG(): void {
         for (let i = 0; i < TESTS.length; i++) {
             TESTS[i].schoolAverage = 0;
@@ -111,12 +111,14 @@ export class TeacherComponent {
         }
     }
 
-    //calculate class average for each test
+    // Calculate class average for each test
     private calculateClassAVG(): void {
         for (let i = 0; i < ClassTESTS.length; i++) {
             ClassTESTS[i].classAverage = 0;
             for (let j = 0; j < ClassTESTS.length; j++) {
-                if (ClassTESTS[i].desc == ClassTESTS[j].desc && ClassTESTS[i].abbreviation == ClassTESTS[j].abbreviation && ClassTESTS[i].grade == ClassTESTS[j].grade) {
+                if (ClassTESTS[i].desc == ClassTESTS[j].desc &&
+                  ClassTESTS[i].abbreviation == ClassTESTS[j].abbreviation &&
+                  ClassTESTS[i].grade == ClassTESTS[j].grade) {
                     ClassTESTS[i].averageCounter++;
                     ClassTESTS[i].classAverage += ClassTESTS[j].percentage;
                 }
@@ -135,7 +137,7 @@ export class TeacherComponent {
 
     constructor(private http: Http, private router: Router) { }
 
-    //function to read teacher data from CSV
+    // Function to read teacher data from CSV
     readTeacherCsvData() {
         this.http.get(this.csvTeacherUrl)
             .subscribe(
@@ -144,7 +146,13 @@ export class TeacherComponent {
             );
     }
 
-    //function to extract teacher data from CSV
+  /*
+   Based on code by Srinivas Dasari found here http://blog.sodhanalibrary.com/2016/10/read-csv-data-using-angular-2.html
+   Ideally, a database would be used to get the data instead of just grabbing it like this, therefore the code was chosen
+   to save time as in a full version, it would be replaced.
+   */
+
+    // Function to extract teacher data from CSV
     private extractTeacherData(res: Response) {
 
         TEACHERS.splice(0, TEACHERS.length);
@@ -162,7 +170,7 @@ export class TeacherComponent {
                 for (let j = 0; j < headers.length; j++) {
                     tarr.push(data[j]);
                 }
-                if (i > 0) { //ignore header row
+                if (i > 0) { // Ignore header row
                     let teacher = new Teacher(data[0], data[1], data[2], data[3], data[4], data[5], data[6]);
                     TEACHERS.push(teacher);
                     lines.push(tarr);
@@ -172,7 +180,7 @@ export class TeacherComponent {
         this.csvTeacherData = lines;
     }
 
-    //function to read student data from CSV
+    // Function to read student data from CSV
     readStudentCsvData() {
         this.http.get(this.csvStudentUrl)
             .subscribe(
@@ -181,8 +189,8 @@ export class TeacherComponent {
             );
     }
 
-    //function to extract student data from CSV
-    //only pushes student data into the array if the class ID matches that of the selected teacher
+    // Function to extract student data from CSV
+    // Only pushes student data into the array if the class ID matches that of the selected teacher
     private extractStudentData(res: Response) {
 
         STUDENTS.splice(0, STUDENTS.length);
@@ -201,7 +209,7 @@ export class TeacherComponent {
                     tarr.push(data[j]);
                 }
                 if (data[6] == this.selectedTeacher.classID) {
-                    if (i > 0) { //ignore header row
+                    if (i > 0) { // Ignore header row
                         let student = new Student(data[0], data[1], data[2], data[3], data[4], data[5], data[6]);
                         STUDENTS.push(student);
                         lines.push(tarr);
@@ -211,14 +219,24 @@ export class TeacherComponent {
         }
         this.csvStudentData = lines;
 
-        //force these functions to get called after all the student data has been read in
-        //because for whatever reason, it's calling them first if done in onSelectTeacher
-        this.getClassTests();
-        this.calculateSchoolAVG();
-        this.calculateClassAVG();
+        // Sort students alphabetically by last name
+        STUDENTS.sort(function(a, b){
+          var nameA = a.lastName.toLowerCase(), nameB = b.lastName.toLowerCase();
+          if (nameA < nameB)
+            return -1;
+          if (nameA > nameB)
+            return 1;
+          return 0;
+        });
+
+      // Force these functions to get called after all the student data has been read in
+      // Because for whatever reason, it's calling them first if done in onSelectTeacher
+      this.getClassTests();
+      this.calculateSchoolAVG();
+      this.calculateClassAVG();
     }
 
-    //function to read test data from CSV
+    // Function to read test data from CSV
     readTestCsvData() {
         this.http.get(this.csvTestUrl)
             .subscribe(
@@ -227,7 +245,7 @@ export class TeacherComponent {
             );
     }
 
-    //function to extract test data from CSV
+    // Function to extract test data from CSV
     private extractTestData(res: Response) {
 
         TESTS.splice(0, TESTS.length);
@@ -245,8 +263,8 @@ export class TeacherComponent {
                 for (let j = 0; j < headers.length; j++) {
                     tarr.push(data[j]);
                 }
-                if (i > 0) { //ignore header row
-                    let test = new Test(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]);
+                if (i > 0) { // Ignore header row
+                    let test = new Test(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]);
                     TESTS.push(test);
                     lines.push(tarr);
                 }
@@ -255,7 +273,7 @@ export class TeacherComponent {
         this.csvTestData = lines;
     }
 
-    //Error handler
+    // Error handler
     private handleError(error: any) {
         // In a real world app, we might use a remote logging infrastructure
         // We'd also dig deeper into the error to get a better message

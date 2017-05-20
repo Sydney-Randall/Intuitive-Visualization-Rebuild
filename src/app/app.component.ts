@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
       `
 })
 export class AppComponent {
-    title = 'College Place High School'; //todo: replace with the school name obtained from school district CSV file
+    title = 'College Place High School';
 }
