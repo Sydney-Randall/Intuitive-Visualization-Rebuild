@@ -1,4 +1,11 @@
-﻿import { Component } from '@angular/core';
+﻿/*
+Student component, displays the list of students a teacher has in a class.
+There is currently only one class per teacher, but a teacher would have multiple classes.
+There are multiple ways someone could display classes and the students in them, drop-downs, expanding tabs, etc.
+This proof of concept does not attempt to do multiple classes per teacher.
+ */
+
+import { Component } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Teacher, TEACHERS }  from './teacher';

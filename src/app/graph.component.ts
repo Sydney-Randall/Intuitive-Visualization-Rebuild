@@ -1,5 +1,3 @@
-
-
 import { Component, Input, OnInit, OnChanges, ViewChild, ElementRef, AfterViewChecked} from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Teacher, TEACHERS } from './teacher';
@@ -29,8 +27,11 @@ import * as d3 from 'd3';
             <li *ngFor="let test of tests">
                 {{test.fullName}} {{test.desc}} {{test.taken}}
             <br>
-              <h4 [ngStyle]="{'color': test.levelColor}">
-                    {{test.levelText}}
+              <h4 [ngStyle]="{'color': test.levelColor, 'margin-bottom': 0}">
+                    {{test.levelText}} : {{test.level}}
+              </h4>
+              <h4 [ngStyle]="{'color': test.compareColor, 'margin-top': 0}">
+                    {{test.compareText}}
               </h4>
             </li>
         </ul>
@@ -72,10 +73,45 @@ export class GraphComponent implements OnInit, OnChanges, AfterViewChecked {
     ngOnInit() {
         this.currentStudent = this.service.getStudent(this.id);
         this.initSvg();
-
+        this.sortTestBySubject();
+        this.compareTestLevels();
     }
 
     ngOnChanges() {
+    }
+
+    // Function to sort the tests by subject, same as function used to sort students by last name
+    sortTestBySubject() {
+      StudentTESTS.sort(function(a, b){
+        var nameA = a.desc.toLowerCase(), nameB = b.desc.toLowerCase();
+        if (nameA < nameB)
+          return -1;
+        if (nameA > nameB)
+          return 1;
+        return 0;
+      });
+    }
+
+    // Function that compares the level obtained on a test to the previous one and determines how they compare.
+    compareTestLevels() {
+        for (let i = 0; i < StudentTESTS.length; i++) {
+          if (i === 0 || StudentTESTS[i].desc !== StudentTESTS[i - 1].desc) {
+            StudentTESTS[i].compareText = 'No previous test data';
+          } else if (StudentTESTS[i].desc === StudentTESTS[i - 1].desc) {
+            if (StudentTESTS[i].levelNumber === StudentTESTS[i - 1].levelNumber) {
+              StudentTESTS[i].compareText = 'Steady';
+              StudentTESTS[i].compareColor = 'blue';
+            }
+            if (StudentTESTS[i].levelNumber < StudentTESTS[i - 1].levelNumber) {
+              StudentTESTS[i].compareText = 'Declining';
+              StudentTESTS[i].compareColor = 'red';
+            }
+            if (StudentTESTS[i].levelNumber > StudentTESTS[i - 1].levelNumber) {
+              StudentTESTS[i].compareText = 'Improving';
+              StudentTESTS[i].compareColor = 'limegreen';
+            }
+          }
+        }
     }
 
     ngAfterViewChecked() {

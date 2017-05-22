@@ -1,4 +1,8 @@
-﻿import { Injectable } from '@angular/core';
+﻿/*
+Used to return the arrays of students, depending on what is needed
+ */
+
+import { Injectable } from '@angular/core';
 import { Student, STUDENTS} from './student';
 
 @Injectable()

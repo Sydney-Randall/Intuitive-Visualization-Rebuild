@@ -1,4 +1,14 @@
-﻿import { Component } from '@angular/core';
+﻿/*
+Teacher component, displays the list of teachers. Simulates a login page.
+Ideally, a Google login would have been used to log-in a teacher, however we were not given the permissions to use that.
+In the future, an admin could have access to the system where a list of all teachers in the school would be needed.
+
+All the functions that read data are located here.
+In the real-world, having the data obtained while a teacher is logging in wouldn't be an issue
+A loading page could be used, and a slight lag while logging into systems is normal.
+ */
+
+import { Component } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Teacher, TEACHERS } from './teacher';
@@ -128,6 +138,12 @@ export class TeacherComponent {
         }
     }
 
+  /*
+   Based on code by Srinivas Dasari found here http://blog.sodhanalibrary.com/2016/10/read-csv-data-using-angular-2.html
+   Ideally, a database would be used to get the data instead of just grabbing it like this, therefore the code was chosen
+   to save time as in a full version, it would be replaced.
+   */
+
     csvTeacherUrl: string = 'assets/TeacherFields.csv';  // URL to web API
     csvTeacherData: any[] = [];
     csvStudentUrl: string = 'assets/StudentFields.csv';  // URL to web API
@@ -145,12 +161,6 @@ export class TeacherComponent {
             err => this.handleError(err)
             );
     }
-
-  /*
-   Based on code by Srinivas Dasari found here http://blog.sodhanalibrary.com/2016/10/read-csv-data-using-angular-2.html
-   Ideally, a database would be used to get the data instead of just grabbing it like this, therefore the code was chosen
-   to save time as in a full version, it would be replaced.
-   */
 
     // Function to extract teacher data from CSV
     private extractTeacherData(res: Response) {
