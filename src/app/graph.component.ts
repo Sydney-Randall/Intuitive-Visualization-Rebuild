@@ -63,6 +63,7 @@ export class GraphComponent implements OnInit{
         this.currentStudent = this.service.getStudent(this.id);
         this.sortTestBySubject();
         this.compareTestLevels();
+        this.changeTests();
     }
 
 
