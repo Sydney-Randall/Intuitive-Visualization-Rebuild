@@ -1,4 +1,4 @@
-# Intuitive Visualizaion of Standardized Test Data (Rebuild)
+# Intuitive Visualizaion of Standardized Test Data
 
 Community service team project for College Place School District
 
