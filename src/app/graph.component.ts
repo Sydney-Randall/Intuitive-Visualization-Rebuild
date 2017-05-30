@@ -4,6 +4,8 @@ import { Teacher, TEACHERS } from './teacher';
 import { Student, STUDENTS } from './student';
 import { Test, TESTS, StudentTESTS } from './tests';
 import { StudentService} from './student.service';
+import { RadarData } from './radar-data';
+import { DataEntry } from './data-entry';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as d3 from 'd3';
 
@@ -14,6 +16,12 @@ import * as d3 from 'd3';
         <line-graph [testData]="selectedTests"></line-graph>
         <select [(ngModel)]="selected" (change)="changeTests()"> 
           <option *ngFor="let category of categories" value="{{category}}">
+            {{category}}
+          </option>
+        </select>
+        <radar-chart [radarData]="selectedRadData"></radar-chart>
+        <select [(ngModel)]="radSel" (change)="changeRadarData()">
+          <option *ngFor="let category of radCat" value="{{category}}">
             {{category}}
           </option>
         </select>
@@ -47,8 +55,43 @@ export class GraphComponent implements OnInit{
     currentStudent: Student;
     id: string;
     categories = ['MATH', 'ENGLISH'];
-    selected: string = 'MATH'
+    selected: string = 'MATH';
 
+    //radar chart values
+    radCat = ['CLASS', 'SCHOOL'];
+    radSel: string = 'CLASS';
+
+    //test way of entering data while I get radar chart working
+    studentData: DataEntry[] = [
+      new DataEntry('MATH', 50),
+      new DataEntry('ENGLISH', 50),
+      new DataEntry('SCIENCE', 50),
+      new DataEntry('ATTENDANCE', 50),
+      new DataEntry('SOC. STUDIES', 50)
+    ];
+    classData: DataEntry[] = [
+      new DataEntry('MATH', 75),
+      new DataEntry('ENGLISH', 75),
+      new DataEntry('SCIENCE', 75),
+      new DataEntry('ATTENDANCE', 75),
+      new DataEntry('SOC. STUDIES', 75)
+    ];
+    schoolData: DataEntry[] = [
+      new DataEntry('MATH', 100),
+      new DataEntry('ENGLISH', 100),
+      new DataEntry('SCIENCE', 100),
+      new DataEntry('ATTENDANCE', 100),
+      new DataEntry('SOC. STUDIES', 100)
+    ];
+
+    stuAvgRadData: RadarData = new RadarData('Student Averages', this.studentData);
+    classAvgRadData: RadarData = new RadarData('Class Averages', this.classData);
+    schoolAvgRadData: RadarData = new RadarData('School Averages', this.schoolData);
+
+    selectedRadData: RadarData[] = [
+      this.stuAvgRadData,
+      this.classAvgRadData
+    ];
 
     constructor(
         private route: ActivatedRoute,
@@ -106,5 +149,20 @@ export class GraphComponent implements OnInit{
         return test.desc.indexOf(this.selected) > -1;
       });
     }
+
+    changeRadarData() {
+      if(this.radSel == 'CLASS'){
+        this.selectedRadData = [
+          this.stuAvgRadData,
+          this.classAvgRadData 
+        ];
+      } else if(this.radSel == 'SCHOOL'){
+        this.selectedRadData = [
+          this.stuAvgRadData,
+          this.schoolAvgRadData
+        ];
+      }
+    }
+
 }
 

@@ -9,6 +9,7 @@ import { StudentComponent } from './student.component';
 import { GraphComponent} from './graph.component';
 import { StudentService} from './student.service';
 import { LineGraphComponent } from './line-graph.component';
+import { RadarChartComponent } from './radar-chart.component';
 
 @NgModule({
     imports: [
@@ -22,7 +23,7 @@ import { LineGraphComponent } from './line-graph.component';
             { path: '', redirectTo: '/teachers', pathMatch: 'full' } // Set teacher path as default
         ])
     ],
-    declarations: [AppComponent, TeacherComponent, StudentComponent, GraphComponent, LineGraphComponent],
+    declarations: [AppComponent, TeacherComponent, StudentComponent, GraphComponent, LineGraphComponent, RadarChartComponent ],
     providers: [StudentService],
     bootstrap: [ AppComponent ]
 })
