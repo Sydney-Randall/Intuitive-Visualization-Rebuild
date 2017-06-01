@@ -36,7 +36,7 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 	private svg: any;
 	private total: any;
 	private radius2 = this.factor*Math.min(this.w/2, this.h/2);
-	private Format: any = d3.format('%');
+	private Format: any = d3.format('.0%');
 	private allAxis: any;
 	private series : number;
 
@@ -87,6 +87,22 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 				.attr("transform", "translate(" + (this.w/2-levelFactor) + ", " + (this.h/2-levelFactor) + ")");
 		}
 
+		//label the percentage of each level
+		for(let j =0; j<this.levels; j++) {
+			let levelFactor = this.factor*this.radius2*((j+1)/this.levels);
+			this.svg.selectAll(".levels")
+				.data([1])
+				.enter()
+				.append("svg:text")
+				.attr("x", (d) => { return levelFactor*(1-this.factor*Math.sin(0));})
+				.attr("y", (d) => { return levelFactor*(1-this.factor*Math.cos(0));})
+				.attr("class", "legend")
+				.style("font-family", "sans-serif")
+				.style("font-size", "10px")
+				.attr("transform", "translate("+(this.w/2-levelFactor + this.ToRight) + ", " + (this.h/2-levelFactor) + ")")
+				.attr("fill", '#737373')
+				.text(this.Format((j+1)*this.maxValue/this.levels/100));
+		}
 		//draw the lines that "explode" from the center
 		let axis = this.svg.selectAll(".axis")
 			.data(this.allAxis)
