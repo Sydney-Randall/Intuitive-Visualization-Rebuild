@@ -11,7 +11,10 @@ import * as d3 from 'd3';
 
 @Component({
 	selector: 'radar-chart',
-	template: '<div id="radar-chart"></div>'
+	template: `
+		<div id="radar-chart"></div>
+		<div id="legend"></div>
+		`
 })
 
 export class RadarChartComponent implements OnInit, AfterViewChecked {
@@ -40,6 +43,8 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 	private allAxis: any;
 	private series : number;
 
+	private dataLabels: string[] = [];
+
 
 	constructor() {
 
@@ -52,8 +57,16 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 
 	ngAfterViewChecked() {
 		this.resetChart();
+		this.fillLabels();
 		this.initSvg();
 		this.drawChart();
+	}
+
+	private fillLabels() {
+		for(var datum of this.radarData) {
+			this.dataLabels.push(datum.name);
+			console.log(datum.name);
+		}
 	}
 
 	private initSvg() {
@@ -163,9 +176,55 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 				.text((j) => { return Math.max(j.value,0)});
 				this.series++;
 		});
+
+		let legSvg = d3.select('#legend')
+			.append('svg')
+			.attr("width", 400)
+			.attr("height", 200)
+
+		let text = legSvg.append("text")
+			.attr("class", "title")
+			.attr('transform', 'translate(90,0)')
+			.attr('x', 30)
+			.attr('y', 10)
+			.attr('font-size', '12px')
+			.attr('fill', '#404040')
+			.text('Most recent scores (%)');
+
+		let legend = legSvg.append("g")
+			.attr('class', 'legend')
+			.attr('height', 100)
+			.attr('width', 200)
+			.attr('transform', 'translate(90,20)');
+
+		legend.selectAll('rect')
+			.data(this.dataLabels)
+			.enter()
+			.append('rect')
+			.attr('x', 35)
+			.attr('y', (d,i) => { return i*20 })
+			.attr('width',10)
+			.attr('height',10)
+			.style('fill', (d, i) => { return this.color(i)} );
+
+		legend.selectAll('text')
+			.data(this.dataLabels)
+			.enter()
+			.append('text')
+			.attr('x',48 )
+			.attr('y', (d,i) => { return i*20+9;})
+			.attr('width', 10)
+			.attr('font-size', '11px')
+			.attr('fill', '#737373')
+			.text((d) => { return d; });
+
 	}
 
 	private resetChart() {
 		d3.select("#radar-chart").select("svg").remove();
+		for(let i = 0; i <= this.dataLabels.length; i++){
+			this.dataLabels.pop();
+		}
+		d3.select("#legend").select("svg").remove();
 	}
 }
