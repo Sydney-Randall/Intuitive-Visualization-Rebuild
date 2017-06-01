@@ -12,8 +12,8 @@ import * as d3 from 'd3';
 @Component({
 	selector: 'radar-chart',
 	template: `
-		<div id="radar-chart"></div>
 		<div id="legend"></div>
+		<div id="radar-chart"></div>
 		`
 })
 
@@ -60,6 +60,7 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 		this.fillLabels();
 		this.initSvg();
 		this.drawChart();
+		this.buildLegend();
 	}
 
 	private fillLabels() {
@@ -176,11 +177,13 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 				.text((j) => { return Math.max(j.value,0)});
 				this.series++;
 		});
+	}
 
+	private buildLegend() {
 		let legSvg = d3.select('#legend')
 			.append('svg')
 			.attr("width", 400)
-			.attr("height", 200)
+			.attr("height", 100)
 
 		let text = legSvg.append("text")
 			.attr("class", "title")
@@ -217,7 +220,6 @@ export class RadarChartComponent implements OnInit, AfterViewChecked {
 			.attr('font-size', '11px')
 			.attr('fill', '#737373')
 			.text((d) => { return d; });
-
 	}
 
 	private resetChart() {

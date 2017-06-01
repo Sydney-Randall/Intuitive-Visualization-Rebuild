@@ -13,39 +13,49 @@ import * as d3 from 'd3';
     selector: 'my-graphs',
     //templateUrl: 'app/graph.component.html',
     template: `
-        <line-graph [testData]="selectedTests"></line-graph>
-        <select [(ngModel)]="selected" (change)="changeTests()"> 
-          <option *ngFor="let category of categories" value="{{category}}">
-            {{category}}
-          </option>
-        </select>
-        <radar-chart [radarData]="selectedRadData"></radar-chart>
-        <select [(ngModel)]="radSel" (change)="changeRadarData()">
-          <option *ngFor="let category of radCat" value="{{category}}">
-            {{category}}
-          </option>
-        </select>
-        <div *ngIf="currentStudent">
-          <h2>{{currentStudent.firstName}} {{currentStudent.lastName}}</h2>
-          <div>
-            <label>ID: </label>{{currentStudent.id}}
+        <div>
+          <div style="float:left;">
+            <line-graph [testData]="selectedTests"></line-graph>
             <br>
-            <label>Current Grade: </label>{{currentStudent.reportingGrade}}
+            <select [(ngModel)]="selected" (change)="changeTests()"> 
+              <option *ngFor="let category of categories" value="{{category}}">
+                {{category}}
+              </option>
+            </select>
           </div>
+          <div style="float:left;">
+            <radar-chart [radarData]="selectedRadData"></radar-chart>
+            <select [(ngModel)]="radSel" (change)="changeRadarData()">
+              <option *ngFor="let category of radCat" value="{{category}}">
+                {{category}}
+              </option>
+            </select>
+           </div>
         </div>
-        <h4>Standardized Test Results</h4>
-        <ul class="tests">
-            <li *ngFor="let test of tests">
-                {{test.fullName}} {{test.desc}} {{test.taken}}
-            <br>
-              <h4 [ngStyle]="{'color': test.levelColor, 'margin-bottom': 0}">
-                    {{test.levelText}} : {{test.level}}
-              </h4>
-              <h4 [ngStyle]="{'color': test.compareColor, 'margin-top': 0}">
-                    {{test.compareText}}
-              </h4>
-            </li>
-        </ul>
+        <br>
+        <div style="float:left;">
+          <div *ngIf="currentStudent">
+            <h2>{{currentStudent.firstName}} {{currentStudent.lastName}}</h2>
+            <div>
+              <label>ID: </label>{{currentStudent.id}}
+              <br>
+              <label>Current Grade: </label>{{currentStudent.reportingGrade}}
+            </div>
+          </div>
+          <h4>Standardized Test Results</h4>
+          <ul class="tests">
+              <li *ngFor="let test of tests">
+                  {{test.fullName}} {{test.desc}} {{test.taken}}
+              <br>
+                <h4 [ngStyle]="{'color': test.levelColor, 'margin-bottom': 0}">
+                      {{test.levelText}} : {{test.level}}
+                </h4>
+                <h4 [ngStyle]="{'color': test.compareColor, 'margin-top': 0}">
+                      {{test.compareText}}
+                </h4>
+              </li>
+          </ul>
+        </div>
     `
 })
 
