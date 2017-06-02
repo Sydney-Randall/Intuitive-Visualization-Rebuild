@@ -13,25 +13,29 @@ import * as d3 from 'd3';
     selector: 'my-graphs',
     //templateUrl: 'app/graph.component.html',
     template: `
-        <div>
           <div style="float:left;">
-            <line-graph [testData]="selectedTests"></line-graph>
-            <br>
+            <h2>Test Performance Over Time</h2>
+            Select the test category to view: 
             <select [(ngModel)]="selected" (change)="changeTests()"> 
               <option *ngFor="let category of categories" value="{{category}}">
                 {{category}}
               </option>
             </select>
+            <br>
+            <line-graph [testData]="selectedTests"></line-graph>
           </div>
           <div style="float:left;">
-            <radar-chart [radarData]="selectedRadData"></radar-chart>
+            <h2>Peer Comparison of Student Performance</h2>
+            Select the averages to compare: 
             <select [(ngModel)]="radSel" (change)="changeRadarData()">
               <option *ngFor="let category of radCat" value="{{category}}">
                 {{category}}
               </option>
             </select>
+            <br>
+            <br>
+            <radar-chart [radarData]="selectedRadData"></radar-chart>
            </div>
-        </div>
         <br>
         <div style="float:left;">
           <div *ngIf="currentStudent">
