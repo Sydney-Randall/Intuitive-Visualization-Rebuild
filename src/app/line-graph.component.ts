@@ -45,6 +45,14 @@ export class LineGraphComponent implements OnInit, AfterViewChecked {
       return +d.percentage;
     }
 
+    private getClassAverage(d: Test): number {
+        return +d.classAverage;
+    }
+
+    private getSchoolAverage(d: Test): number {
+        return +d.schoolAverage;
+    }
+
     private initSvg() {
     	this.svg = d3.select("svg#line-graph")
  			.append("g")
@@ -78,6 +86,7 @@ export class LineGraphComponent implements OnInit, AfterViewChecked {
   }
 
   private drawLine() {
+      // Draw student test results
 	this.line = d3.line()
 		.x( (d: any) => { 
 			return this.x(this.convertDate(d));
@@ -87,11 +96,72 @@ export class LineGraphComponent implements OnInit, AfterViewChecked {
 		});
 
     this.svg.append("path")
-            .datum(this.testData)
-            .attr("class", "line")
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("d", this.line);
+        .datum(this.testData)
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 3)
+        .attr("d", this.line);
+
+    this.svg.append("text")
+        .attr("transform", "translate(" + (3) + "," + this.y + ")")
+        .attr("x", 700)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "start")
+        .style("fill", "steelblue")
+        .text("Student Scores");
+
+      // Draw class average results
+    this.line = d3.line()
+        .x((d: any) => {
+            return this.x(this.convertDate(d));
+        })
+        .y((d: any) => {
+            return this.y(this.getClassAverage(d));
+        });
+
+    this.svg.append("path")
+        .datum(this.testData)
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", "orange")
+        .attr("stroke-width", 3)
+        .attr("d", this.line);
+
+    this.svg.append("text")
+        .attr("transform", "translate(" + (3) + "," + this.y + ")")
+        .attr("x", 700)
+        .attr("y", 15)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "start")
+        .style("fill", "orange")
+        .text("Class Averages");
+
+      // Draw school average results
+    this.line = d3.line()
+        .x((d: any) => {
+            return this.x(this.convertDate(d));
+        })
+        .y((d: any) => {
+            return this.y(this.getSchoolAverage(d));
+        });
+
+    this.svg.append("path")
+        .datum(this.testData)
+        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-width", 3)
+        .attr("d", this.line);
+
+    this.svg.append("text")
+        .attr("transform", "translate(" + (3) + "," + this.y + ")")
+        .attr("x", 700)
+        .attr("y", 30)
+        .attr("dy", ".35em")
+        .attr("text-anchor", "start")
+        .style("fill", "black")
+        .text("School Averages");
   }
 
   private resetGraph() {
