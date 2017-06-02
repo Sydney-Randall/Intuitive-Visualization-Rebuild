@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, OnChanges} from '@angular/core';
+import { Component, Input, OnInit, OnChanges, Inject} from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 import { Http, Response } from '@angular/http';
 import { Teacher, TEACHERS } from './teacher';
 import { Student, STUDENTS } from './student';
@@ -104,6 +105,7 @@ export class GraphComponent implements OnInit{
     ];
 
     constructor(
+        @Inject(DOCUMENT) private document: Document,
         private route: ActivatedRoute,
         private router: Router,
         private service: StudentService) {
@@ -113,12 +115,12 @@ export class GraphComponent implements OnInit{
     }
 
     ngOnInit() {
+        this.document.body.scrollTop = 0; // Force page to scroll to the top
         this.currentStudent = this.service.getStudent(this.id);
         this.sortTestBySubject();
         this.compareTestLevels();
         this.changeTests();
     }
-
 
     // Function to sort the tests by subject, same as function used to sort students by last name
     sortTestBySubject() {
