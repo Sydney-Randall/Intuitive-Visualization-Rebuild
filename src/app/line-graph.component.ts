@@ -167,5 +167,6 @@ export class LineGraphComponent implements OnInit, AfterViewChecked {
   private resetGraph() {
   	this.svg.selectAll("g.axis").remove();
   	this.svg.selectAll("path").remove();
+    this.svg.selectAll("text").remove();
   }
 }
