@@ -91,16 +91,16 @@ export class GraphComponent implements OnInit{
       new DataEntry('SOC. STUDIES', 75)
     ];
     schoolData: DataEntry[] = [
-      new DataEntry('MATH', 100),
-      new DataEntry('ENGLISH', 100),
-      new DataEntry('SCIENCE', 100),
-      new DataEntry('ATTENDANCE', 100),
-      new DataEntry('SOC. STUDIES', 100)
+      new DataEntry('MATH', 75),
+      new DataEntry('ENGLISH', 75),
+      new DataEntry('SCIENCE', 75),
+      new DataEntry('ATTENDANCE', 75),
+      new DataEntry('SOC. STUDIES', 75)
     ];
 
-    stuAvgRadData: RadarData = new RadarData('Student Averages', this.studentData);
-    classAvgRadData: RadarData = new RadarData('Class Averages', this.classData);
-    schoolAvgRadData: RadarData = new RadarData('School Averages', this.schoolData);
+    stuAvgRadData: RadarData; 
+    classAvgRadData: RadarData;
+    schoolAvgRadData: RadarData;
 
     selectedRadData: RadarData[] = [
       this.stuAvgRadData,
@@ -114,6 +114,8 @@ export class GraphComponent implements OnInit{
         this.route.params.subscribe(params => {
             this.id = params['id'];
         });
+
+        this.buildRadarData();
     }
 
     ngOnInit() {
@@ -121,6 +123,7 @@ export class GraphComponent implements OnInit{
         this.sortTestBySubject();
         this.compareTestLevels();
         this.changeTests();
+        this.changeRadarData();
     }
 
 
@@ -176,6 +179,34 @@ export class GraphComponent implements OnInit{
           this.schoolAvgRadData
         ];
       }
+    }
+
+    buildRadarData() {
+      let engMostRecent = new Date("01/01/1970");
+      let mathMostRecent = new Date("01/01/1970");
+      for(let i = 0; i < this.tests.length; i++) {
+        // build the english scores for each radar category
+        if(this.tests[i].desc == 'ENGLISH' && engMostRecent < new Date(this.tests[i].taken)) {
+          this.studentData[1].value = +this.tests[i].percentage;
+          this.classData[1].value = +this.tests[i].classAverage;
+          this.schoolData[1].value = +this.tests[i].schoolAverage;
+          engMostRecent = new Date(this.tests[i].taken);
+        }
+        // build the math scores for each radar category
+        if(this.tests[i].desc == 'MATH' && mathMostRecent < new Date(this.tests[i].taken)) {
+          this.studentData[0].value = +this.tests[i].percentage;
+          this.classData[0].value = +this.tests[i].classAverage;
+          this.schoolData[0].value = +this.tests[i].schoolAverage;
+          mathMostRecent = new Date(this.tests[i].taken);
+        }
+
+        // if we had other data sources they would each have their own array here
+      }
+
+      //build the objects
+      this.stuAvgRadData = new RadarData('Student Averages', this.studentData);
+      this.classAvgRadData = new RadarData('Class Averages', this.classData);
+      this.schoolAvgRadData = new RadarData('School Averages', this.schoolData);
     }
 
 }
